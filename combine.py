@@ -9,15 +9,15 @@ def create_parser():
     parser.add_argument(
         'cbzfile',
         metavar = 'cbzfile',
-        type = str,
-        help = 'destination file'
+        type    = str,
+        help    = 'destination file'
     )
     parser.add_argument(
         'filenames',
         metavar = 'file',
-        type = str,
-        nargs = '+',
-        help = 'a list of .cbz files to combine'
+        type    = str,
+        nargs   = '+',
+        help    = 'a list of .cbz files to combine'
     )
 
     return parser
@@ -29,16 +29,17 @@ def create_archive(dest_filename, filenames):
             shutil.copy(filename, tmp_folder_path / filename)
         for filename in tmp_folder_path.iterdir():
             if filename.suffix != '.cbz':
-                print(filename, 'nop')
                 continue
-            print(filename, 'yep')
             with ZipFile(filename, 'r') as zip_file:
                 zip_file.extractall(tmp_folder_path)
         with ZipFile(dest_filename, 'w') as dest_zip_file:
             for filename in tmp_folder_path.iterdir():
                 if filename.suffix != '.jpg':
                     continue
-                dest_zip_file.write(filename)
+                dest_zip_file.write(
+                    filename = filename,
+                    arcname = filename.name
+                )
 
 if __name__ == '__main__':
     parser = create_parser()
