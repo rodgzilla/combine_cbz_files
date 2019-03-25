@@ -34,13 +34,13 @@ def create_archive(dest_filename, filenames):
             print(filename, 'yep')
             with ZipFile(filename, 'r') as zip_file:
                 zip_file.extractall(tmp_folder_path)
-        # with ZipFile(dest_filename, 'w') as zip_file:
-        #     for filename in filenames:
-        #         zip_file.write(filename)
+        with ZipFile(dest_filename, 'w') as dest_zip_file:
+            for filename in tmp_folder_path.iterdir():
+                if filename.suffix != '.jpg':
+                    continue
+                dest_zip_file.write(filename)
 
 if __name__ == '__main__':
     parser = create_parser()
     args   = parser.parse_args()
-    print(args.cbzfile)
-    print(args.filenames)
     create_archive(args.cbzfile, args.filenames)
