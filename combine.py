@@ -28,8 +28,12 @@ def create_archive(dest_filename, filenames):
         for filename in filenames:
             shutil.copy(filename, tmp_folder_path / filename)
         for filename in tmp_folder_path.iterdir():
-            print(filename)
-
+            if filename.suffix != '.cbz':
+                print(filename, 'nop')
+                continue
+            print(filename, 'yep')
+            with ZipFile(filename, 'r') as zip_file:
+                zip_file.extractall(tmp_folder_path)
         # with ZipFile(dest_filename, 'w') as zip_file:
         #     for filename in filenames:
         #         zip_file.write(filename)
