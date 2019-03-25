@@ -1,7 +1,8 @@
 from zipfile import ZipFile
 import pathlib
 import argparse
-import tempfolder
+import tempfile
+import shutil
 
 def create_parser():
     parser = argparse.ArgumentParser(description = 'Combine .cbz files')
@@ -22,10 +23,16 @@ def create_parser():
     return parser
 
 def create_archive(dest_filename, filenames):
-    with
-    with ZipFile(dest_filename, 'w') as zip_file:
+    with tempfile.TemporaryDirectory() as tmp_folder:
+        tmp_folder_path = pathlib.Path(tmp_folder)
         for filename in filenames:
-            zip_file.write(filename)
+            shutil.copy(filename, tmp_folder_path / filename)
+        for filename in tmp_folder_path.iterdir():
+            print(filename)
+
+        # with ZipFile(dest_filename, 'w') as zip_file:
+        #     for filename in filenames:
+        #         zip_file.write(filename)
 
 if __name__ == '__main__':
     parser = create_parser()
